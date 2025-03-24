@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuenta Regresiva Dinámica</title>
+    <title>Cuenta Regresiva Sara</title>
     <style>
         * {
             margin: 0;
@@ -119,6 +119,21 @@
             text-align: center;
         }
 
+        .start-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+        }
+
         @keyframes fadeBackground {
             0%, 100% { background-image: url('fondo (1).jpg'); }
             11% { background-image: url('fondo (2).jpg'); }
@@ -147,16 +162,18 @@
             .highlight-text { font-size: 2.5rem; padding: 15px 30px; width: 300px; height: 100px; }
             .video-text { font-size: 2rem; padding: 15px 30px; }
             .footer-countdown { font-size: 0.9rem; }
+            .start-button { font-size: 1.5rem; padding: 15px 30px; }
         }
     </style>
 </head>
 <body>
     <div class="background-carousel"></div>
+    <div class="start-button" id="start-button">Iniciar</div>
     <div class="screen" id="screen1">
         <div class="calendar-widget">Cumpleaños Sara!</div>
     </div>
     <div class="screen" id="screen2">
-        <div class="calendar-widget">Falta:</div>
+        <div class="calendar-widget">Faltan</div>
     </div>
     <div class="screen" id="screen3">
         <div class="calendar-widget" id="months">0 Meses</div>
@@ -177,7 +194,7 @@
         <div class="highlight-text">Te esperamos, ven a celebrar con nosotros</div>
     </div>
     <div class="screen" id="screen9">
-        <video autoplay loop>
+        <video loop id="video">
             <source src="fondo (1).mp4" type="video/mp4">
         </video>
         <div class="video-text">Tango este 12 de Julio a partir de las 6PM</div>
