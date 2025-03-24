@@ -3,76 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuenta Regresiva - Cumpleaños</title>
+    <title>Cuenta Regresiva Dinámica</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-image: url('fondo.jpg'); /* Cambia esto por tu imagen de fondo */
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-carousel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             background-size: cover;
-            color: white;
+            image-rendering: auto;
+            animation: fadeBackground 30s infinite;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 100vh;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1;
         }
-        h1 {
+
+        .screen.active {
+            opacity: 1;
+        }
+
+        .screen video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .calendar-widget {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-shadow: 0 0 5px black;
+            border-radius: 15px;
+            padding: 20px 40px;
             font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        .countdown {
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: bounceIn 1s ease-out;
+            width: 600px;
+            height: 150px;
             display: flex;
             justify-content: center;
-            font-size: 2rem;
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
+            align-items: center;
         }
-        .time-box {
-            background: white;
-            color: black;
-            padding: 10px;
-            border-radius: 5px;
-            min-width: 60px;
+
+        .highlight-text {
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            text-shadow: 0 0 5px black;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 4rem;
+            font-weight: bold;
+            width: 600px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: glow 2s infinite alternate;
+        }
+
+        .video-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            text-shadow: 0 0 5px black;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 3rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .footer-countdown {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            text-shadow: 0 0 5px black;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            z-index: 2;
+            width: 100%;
+            text-align: center;
+        }
+
+        @keyframes fadeBackground {
+            0%, 100% { background-image: url('fondo (1).jpg'); }
+            11% { background-image: url('fondo (2).jpg'); }
+            22% { background-image: url('fondo (3).jpg'); }
+            33% { background-image: url('fondo (4).jpg'); }
+            44% { background-image: url('fondo (5).jpg'); }
+            55% { background-image: url('fondo (6).jpg'); }
+            66% { background-image: url('fondo (7).jpg'); }
+            77% { background-image: url('fondo (8).jpg'); }
+            88% { background-image: url('fondo (9).jpg'); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+        }
+
+        @media (max-width: 600px) {
+            .calendar-widget { font-size: 2rem; padding: 15px 30px; width: 300px; height: 100px; }
+            .highlight-text { font-size: 2.5rem; padding: 15px 30px; width: 300px; height: 100px; }
+            .video-text { font-size: 2rem; padding: 15px 30px; }
+            .footer-countdown { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-
-    <h1>¡Falta para mi cumpleaños!</h1>
-    <div class="countdown">
-        <div class="time-box"><span id="days"></span> días</div>
-        <div class="time-box"><span id="hours"></span> horas</div>
-        <div class="time-box"><span id="minutes"></span> minutos</div>
-        <div class="time-box"><span id="seconds"></span> segundos</div>
+    <div class="background-carousel"></div>
+    <div class="screen" id="screen1">
+        <div class="calendar-widget">Cumpleaños Sara!</div>
     </div>
-
-    <script>
-        function actualizarCuentaRegresiva() {
-            const fechaObjetivo = new Date("July 12, 2025 18:00:00").getTime();
-            const ahora = new Date().getTime();
-            const diferencia = fechaObjetivo - ahora;
-
-            if (diferencia <= 0) {
-                document.querySelector('.countdown').innerHTML = "<h2>¡Feliz Cumpleaños! 🎉</h2>";
-                return;
-            }
-
-            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-            document.getElementById("days").textContent = dias;
-            document.getElementById("hours").textContent = horas;
-            document.getElementById("minutes").textContent = minutos;
-            document.getElementById("seconds").textContent = segundos;
-        }
-
-        setInterval(actualizarCuentaRegresiva, 1000);
-        actualizarCuentaRegresiva();
-    </script>
-
+    <div class="screen" id="screen2">
+        <div class="calendar-widget">Falta:</div>
+    </div>
+    <div class="screen" id="screen3">
+        <div class="calendar-widget" id="months">0 Meses</div>
+    </div>
+    <div class="screen" id="screen4">
+        <div class="calendar-widget" id="days">0 Días</div>
+    </div>
+    <div class="screen" id="screen5">
+        <div class="calendar-widget" id="hours">0 Horas</div>
+    </div>
+    <div class="screen" id="screen6">
+        <div class="calendar-widget" id="minutes">0 Minutos</div>
+    </div>
+    <div class="screen" id="screen7">
+        <div class="calendar-widget" id="seconds">0 Segundos</div>
+    </div>
+    <div class="screen" id="screen8">
+        <div class="highlight-text">Te esperamos, ven a celebrar con nosotros</div>
+    </div>
+    <div class="screen" id="screen9">
+        <video autoplay loop muted>
+            <source src="fondo (1).mp4" type="video/mp4">
+        </video>
+        <div class="video-text">Tango este 12 de Julio a partir de las 6PM</div>
+        <div class="footer-countdown" id="footer-countdown">0 Meses, 0 Días, 0 Horas, 0 Minutos, 0 Segundos</div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
