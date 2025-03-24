@@ -25,13 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const footerCountdown = document.getElementById("footer-countdown");
     const video = document.getElementById("video");
     const startButton = document.getElementById("start-button");
+    const backgroundMusic = document.getElementById("background-music");
 
-    if (!monthsDisplay || !daysDisplay || !hoursDisplay || !minutesDisplay || !secondsDisplay || !footerCountdown || !video || !startButton) {
+    if (!monthsDisplay || !daysDisplay || !hoursDisplay || !minutesDisplay || !secondsDisplay || !footerCountdown || !video || !startButton || !backgroundMusic) {
         console.error("Uno o más elementos no se encontraron");
         return;
     }
 
-    console.log("Botón encontrado:", startButton); // Verificar que el botón se detecte
+    console.log("Botón encontrado:", startButton);
 
     const targetDate = new Date("July 12, 2025 18:00:00").getTime();
     let currentScreen = 0;
@@ -62,7 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
             screens[currentScreen].classList.add("active");
             console.log("Mostrando pantalla:", currentScreen + 1);
 
-            if (currentScreen === 8) { // Pantalla 9
+            // Controlar la música de fondo
+            if (currentScreen === 0) { // Pantalla 1: Iniciar música
+                backgroundMusic.play().then(() => {
+                    console.log("Música de fondo reproduciéndose");
+                }).catch(error => {
+                    console.error("Error al reproducir la música:", error);
+                });
+            } else if (currentScreen === 8) { // Pantalla 9: Detener música y reproducir video
+                backgroundMusic.pause();
+                backgroundMusic.currentTime = 0; // Reiniciar música
+                console.log("Música pausada");
                 video.play().then(() => {
                     console.log("Video reproduciéndose con audio");
                 }).catch(error => {
@@ -79,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Alternativa 1: Usar addEventListener con más depuración
     startButton.addEventListener("click", () => {
         console.log("Botón clicado, iniciando secuencia");
         startButton.style.display = "none";
@@ -87,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         intervalId = setInterval(updateCountdown, 3000);
     });
 
-    // Alternativa 2: Usar onclick como respaldo
     startButton.onclick = () => {
         console.log("Botón clicado (onclick), iniciando secuencia");
         startButton.style.display = "none";
@@ -97,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Evento asignado al botón");
 
-    // Actualizar pie de página en tiempo real
     setInterval(() => {
         if (currentScreen === screens.length) {
             const now = new Date().getTime();
