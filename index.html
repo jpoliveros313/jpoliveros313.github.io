@@ -1,7 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Regresiva - Cumpleaños</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('fondo.jpg'); /* Cambia esto por tu imagen de fondo */
+            background-size: cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            font-size: 2rem;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .time-box {
+            background: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 60px;
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+
+    <h1>¡Falta para mi cumpleaños!</h1>
+    <div class="countdown">
+        <div class="time-box"><span id="days"></span> días</div>
+        <div class="time-box"><span id="hours"></span> horas</div>
+        <div class="time-box"><span id="minutes"></span> minutos</div>
+        <div class="time-box"><span id="seconds"></span> segundos</div>
+    </div>
+
+    <script>
+        function actualizarCuentaRegresiva() {
+            const fechaObjetivo = new Date("July 12, 2025 18:00:00").getTime();
+            const ahora = new Date().getTime();
+            const diferencia = fechaObjetivo - ahora;
+
+            if (diferencia <= 0) {
+                document.querySelector('.countdown').innerHTML = "<h2>¡Feliz Cumpleaños! 🎉</h2>";
+                return;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById("days").textContent = dias;
+            document.getElementById("hours").textContent = horas;
+            document.getElementById("minutes").textContent = minutos;
+            document.getElementById("seconds").textContent = segundos;
+        }
+
+        setInterval(actualizarCuentaRegresiva, 1000);
+        actualizarCuentaRegresiva();
+    </script>
+
 </body>
 </html>
