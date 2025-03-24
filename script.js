@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    console.log("Botón encontrado:", startButton); // Verificar que el botón se detecte
+
     const targetDate = new Date("July 12, 2025 18:00:00").getTime();
     let currentScreen = 0;
     let intervalId;
@@ -77,15 +79,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Iniciar la secuencia solo cuando el usuario hace clic en el botón
+    // Alternativa 1: Usar addEventListener con más depuración
     startButton.addEventListener("click", () => {
-        console.log("Botón presionado, iniciando secuencia");
-        startButton.style.display = "none"; // Ocultar el botón
+        console.log("Botón clicado, iniciando secuencia");
+        startButton.style.display = "none";
         updateCountdown();
         intervalId = setInterval(updateCountdown, 3000);
     });
 
-    // Actualizar el pie de página en tiempo real en la pantalla del video
+    // Alternativa 2: Usar onclick como respaldo
+    startButton.onclick = () => {
+        console.log("Botón clicado (onclick), iniciando secuencia");
+        startButton.style.display = "none";
+        updateCountdown();
+        intervalId = setInterval(updateCountdown, 3000);
+    };
+
+    console.log("Evento asignado al botón");
+
+    // Actualizar pie de página en tiempo real
     setInterval(() => {
         if (currentScreen === screens.length) {
             const now = new Date().getTime();
